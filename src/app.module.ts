@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
 import { DynamooseModule } from 'nestjs-dynamoose';
 
-import { AuthController } from './modules/auth/auth.controller';
 import { UsersModule } from './modules/users/users.module';
 import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './modules/auth/auth.module';
+import { AppService } from './app.service';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -18,7 +20,9 @@ import { ConfigModule } from '@nestjs/config';
       },
     }),
     UsersModule,
+    AuthModule,
   ],
-  controllers: [AuthController],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

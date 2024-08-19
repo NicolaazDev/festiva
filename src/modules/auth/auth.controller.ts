@@ -7,10 +7,10 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('login')
-  signIn(
+  async signIn(
     @Body('username') userName: string,
     @Body('password') password: string,
-  ): AuthResponseDto {
-    return this.authService.signIn(userName, password);
+  ): Promise<AuthResponseDto> {
+    return await this.authService.signIn(userName, password);
   }
 }

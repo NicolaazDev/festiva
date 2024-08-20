@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Post, Put, Param, Get, Query } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UserDto } from './user.dto';
 
@@ -8,6 +8,21 @@ export class UsersController {
 
   @Post('createUser')
   createUser(@Body() user: UserDto) {
-    this.usersService.create(user);
+    return this.usersService.create(user);
+  }
+
+  @Put(':id')
+  async updateUser(@Param('id') id: string, @Body() userDto: UserDto) {
+    return await this.usersService.updateUser(id, userDto);
+  }
+
+  @Get('verify-email')
+  async verifyEmail(
+    @Body('email') email: string,
+    @Body('verificationCode') verificationCode: string,
+  ) {
+    await this.usersService.confirmUser(email, verificationCode);
+
+    return { message: 'Email verificado' };
   }
 }

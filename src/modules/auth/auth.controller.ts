@@ -8,9 +8,14 @@ export class AuthController {
 
   @Post('login')
   async signIn(
-    @Body('username') userName: string,
+    @Body('email') email: string,
     @Body('password') password: string,
   ): Promise<AuthResponseDto> {
-    return await this.authService.signIn(userName, password);
+    return await this.authService.signIn(email, password);
+  }
+
+  @Post('verify-email')
+  async verifyEmail(@Body('code') code: string) {
+    return await this.authService.verifyCode(code);
   }
 }

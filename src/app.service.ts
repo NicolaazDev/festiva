@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 
 @Injectable()
 export class AppService {
   getHello(): string {
-    return 'Hello World!';
+    throw new ConflictException('Method not implemented.');
   }
 }

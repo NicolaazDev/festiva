@@ -1,73 +1,67 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Sistema de Autenticação NestJS
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+![Logo do Projeto](caminho/para/imagem1.png)
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+![Exemplo de Autenticação](caminho/para/imagem2.png)
 
-## Description
+## Descrição
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Este projeto é um sistema de autenticação completo desenvolvido com NestJS. Ele inclui funcionalidades como verificação de e-mail, redefinição de senha e autenticação baseada em JWT. Além disso, o projeto utiliza templates de e-mail personalizáveis com Handlebars e integração com serviços de e-mail via Nodemailer.
 
-## Installation
+## Tecnologias Utilizadas
 
-```bash
-$ yarn install
-```
+- 🚀 **NestJS**: Framework para construção de aplicações server-side eficientes.
+- 🔐 **JWT (JSON Web Token)**: Autenticação segura baseada em tokens.
+- ✨ **Handlebars**: Motor de templates para e-mails personalizados.
+- 📧 **Nodemailer**: Biblioteca para envio de e-mails.
+- 🗃️ **TypeORM**: ORM para gerenciamento de banco de dados.
+- 🐘 **PostgreSQL**: Banco de dados relacional.
+- 🐳 **Docker**: Containerização da aplicação para fácil deploy e ambiente de desenvolvimento consistente.
 
-## Running the app
+## Rotas da API
 
-```bash
-# development
-$ yarn run start
+### Autenticação
 
-# watch mode
-$ yarn run start:dev
+- `POST /auth/login`: Gera um token JWT para autenticação. O tempo de expiração do token é definido na configuração do projeto.
+- `POST /auth/verifyemail`: Verifica o e-mail do usuário utilizando um código enviado anteriormente. O código deve ser passado no corpo da requisição (`body`).
+- `POST /auth/resetpassword`: Envia um e-mail para redefinição de senha. O e-mail do usuário deve ser passado no corpo da requisição (`body`).
 
-# production mode
-$ yarn run start:prod
-```
+### Usuários
 
-## Test
+- `POST /users/createUser`: Registra um novo usuário no banco de dados. O corpo da requisição (`body`) deve conter o `email`, `username` e `senha`.
+- `POST /users/banUser`: Bane um usuário específico, desativando seu acesso ao sistema.
+- `DELETE /users/removeUser`: Remove um usuário do banco de dados.
 
-```bash
-# unit tests
-$ yarn run test
+## Como Rodar
 
-# e2e tests
-$ yarn run test:e2e
+1. Clone o repositório:
 
-# test coverage
-$ yarn run test:cov
-```
+   ```bash
+   git clone https://github.com/seu-usuario/seu-repositorio.git
+   ```
 
-## Support
+2. Navegue até o diretório do projeto:
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+   ```bash
+   cd seu-repositorio
+   npm install
+   nest start
+   ```
 
-## Stay in touch
+3. Configure as variáveis de ambiente no arquivo `.env`(seguindo o `.env.example`).
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+4. Suba os containers com Docker:
 
-## License
+   ```bash
+   docker-compose up -d
+   ```
 
-Nest is [MIT licensed](LICENSE).
+5. Acesse a aplicação em `http://localhost:3000`.
+
+## Contribuição
+
+Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou enviar pull requests.
+
+## Licença
+
+Este projeto está licenciado sob a licença MIT.

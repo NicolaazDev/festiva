@@ -18,4 +18,9 @@ export class AuthController {
   async verifyEmail(@Body('code') code: string) {
     return await this.authService.verifyCode(code);
   }
+
+  @Post('request-reset-password')
+  async requestResetPassword(@Body('email') email: string): Promise<void> {
+    return await this.authService.requestResetPassword(email);
+  }
 }

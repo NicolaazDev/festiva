@@ -13,12 +13,15 @@ import { UserEntity } from '../db/entities/user.entity';
 import { Repository } from 'typeorm';
 import { EmailService } from '../email/email.service';
 import { generateVerificationCode } from 'src/utils/generatorCode';
+import { PasswordReset } from '../db/entities/passwordreset.entity';
+import { addHours } from 'date-fns';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly usersRepository: Repository<UserEntity>,
+
     private readonly emailService: EmailService,
   ) {}
 
@@ -111,28 +114,5 @@ export class UsersService {
 
     Object.assign(userUpdate, user);
     return await this.usersRepository.save(user);
-  }
-
-  async confirmUser(email: string, verificationCode: string): Promise<void> {
-    const user = await this.usersRepository.findOne({
-      where: {
-        email,
-        verificationCode,
-      },
-    });
-
-    if (!user) {
-      throw new NotFoundException('Código de verificação não encontrado');
-    }
-
-    if (user.verificationCodeExpires < new Date()) {
-      throw new ConflictException('Código de verificação expirado');
-    }
-
-    user.isConfirmed = true;
-    user.verificationCode = null;
-    user.verificationCodeExpires = null;
-
-    await this.usersRepository.save(user);
   }
 }

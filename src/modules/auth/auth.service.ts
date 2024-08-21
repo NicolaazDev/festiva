@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   HttpException,
   HttpStatus,
@@ -13,15 +14,20 @@ import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { EmailService } from '../email/email.service';
 
+import { v4 as uuidv4 } from 'uuid';
 import { compareSync } from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 import { addHours, isAfter } from 'date-fns';
 
-import { generateVerificationCode } from 'src/utils/generatorCode';
+import {
+  generateResetPasswordCode,
+  generateVerificationCode,
+} from 'src/utils/generatorCode';
 
 import { UserEntity } from '../db/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { PasswordReset } from '../db/entities/passwordreset.entity';
 
 @Injectable()
 export class AuthService {
@@ -29,6 +35,8 @@ export class AuthService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly usersRepository: Repository<UserEntity>,
+    @InjectRepository(PasswordReset)
+    private readonly passwordResetRepository: Repository<PasswordReset>,
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
@@ -101,5 +109,52 @@ export class AuthService {
       verificationCode,
       user.username,
     );
+  }
+
+  async createPasswordResetToken(userId: string): Promise<string> {
+    const resetToken = generateResetPasswordCode();
+    const expiresAt = addHours(new Date(), 1);
+
+    await this.passwordResetRepository.save({
+      userId,
+      resetToken,
+      expiresAt,
+    });
+
+    return resetToken;
+  }
+
+  async verifyPasswordResetToken(token: string) {
+    const resetRequest = await this.passwordResetRepository.findOne({
+      where: { resetToken: token },
+    });
+
+    const currentTime = new Date();
+
+    if (!resetRequest) {
+      throw new NotFoundException(
+        'Código de redefinição de senha não encontrado',
+      );
+    }
+
+    if (isAfter(currentTime, resetRequest.expiresAt)) {
+      throw new NotFoundException('Código de redefinição expirado');
+    }
+
+    await this.passwordResetRepository.delete({ resetToken: token });
+
+    throw new HttpException('', HttpStatus.OK);
+  }
+
+  async requestResetPassword(email: string) {
+    const user = await this.usersService.findByEmail(email);
+    if (!user) {
+      throw new BadRequestException('Error ao redefinir senha');
+    }
+
+    const resetToken = await this.createPasswordResetToken(user.id);
+    await this.emailService.sendPasswordResetEmail(email, resetToken);
+
+    throw new HttpException('Sucesso', HttpStatus.OK);
   }
 }

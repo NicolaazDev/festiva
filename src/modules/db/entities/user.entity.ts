@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { PasswordReset } from './passwordreset.entity';
 
 @Entity({ name: 'user' })
 export class UserEntity {
@@ -26,4 +27,21 @@ export class UserEntity {
     name: 'verification_code_expires',
   })
   verificationCodeExpires?: Date;
+
+  @OneToMany(() => PasswordReset, (passwordReset) => passwordReset.user)
+  passwordResets: PasswordReset[];
+
+  @Column({ type: 'timestamptz', default: () => 'NOW()', name: 'created_at' })
+  createdAt: Date;
+
+  @Column({
+    type: 'timestamptz',
+    default: () => 'NOW()',
+    name: 'updated_at',
+    onUpdate: 'NOW()',
+  })
+  updatedAt: Date;
+
+  @Column({ type: 'timestamptz', nullable: true, name: 'last_login' })
+  lastLogin?: Date;
 }

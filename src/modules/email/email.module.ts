@@ -2,7 +2,7 @@ import { Module, Global } from '@nestjs/common';
 import { EmailService } from './email.service';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { config } from 'dotenv';
-import { ConfigService } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 config();
 const configService = new ConfigService();
@@ -22,6 +22,7 @@ const configService = new ConfigService();
         },
       },
     }),
+    ConfigModule,
   ],
   providers: [EmailService],
   exports: [EmailService],

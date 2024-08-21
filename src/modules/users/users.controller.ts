@@ -15,14 +15,4 @@ export class UsersController {
   async updateUser(@Param('id') id: string, @Body() userDto: UserDto) {
     return await this.usersService.updateUser(id, userDto);
   }
-
-  @Get('verify-email')
-  async verifyEmail(
-    @Body('email') email: string,
-    @Body('verificationCode') verificationCode: string,
-  ) {
-    await this.usersService.confirmUser(email, verificationCode);
-
-    return { message: 'Email verificado' };
-  }
 }

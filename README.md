@@ -1,11 +1,5 @@
 # Sistema de Autenticação NestJS
 
-![Logo do Projeto](caminho/para/imagem1.png)
-
-![Exemplo de Autenticação](caminho/para/imagem2.png)
-
-## Descrição
-
 Este projeto é um sistema de autenticação completo desenvolvido com NestJS. Ele inclui funcionalidades como verificação de e-mail, redefinição de senha e autenticação baseada em JWT. Além disso, o projeto utiliza templates de e-mail personalizáveis com Handlebars e integração com serviços de e-mail via Nodemailer.
 
 ## Tecnologias Utilizadas
